@@ -1,13 +1,14 @@
 # Play-Store-Scraper
+
 Scrapes images and description of apps in google play store
 
-Install requirements from requirements.txt (use a virtualenv):
+## Setup
 
-    pip install -r requirements.txt
+    python setup.py install
 
-Run file using Python:
+Run play store scraper:
     
-    python main.py
+    play-store-scraper
 
 
 Creates a folder(with package name as folder name)  within the current folder from which the script is run.
