@@ -38,7 +38,8 @@ class PlayStore():
 		""" generate google play store link for a valid package name """
 
 		# https://play.google.com/store/apps/details?id=com.icicibank.pockets
-		return ("https://play.google.com/store/apps/details?id=" + str(self.__package_name))
+		# added english as default language
+		return ("https://play.google.com/store/apps/details?id=" + str(self.__package_name)+ "&hl=en")
 
 	def _fetch_url_content(self):
 		""" fetch html content of play store link """
@@ -65,22 +66,32 @@ class PlayStore():
 			#print("initialized soup: %s" %str(type(soup)))		
 			return soup
 
-	def _parse_soup(self):
+	def _parse_soup(self, write_to_disk):
 		""" parse soup to fetch all required content and save on disk """
 
 		soup = self._generate_soup()
 		cover_image = self._fetch_cover_image(soup)
 		description = self._fetch_description(soup)
 		screenshots = self._fetch_screenshots(soup)
+		title = self._fetch_title(soup)
+		category = self._fetch_category(soup)
+		year = self._fetch_year(soup)
+		requirement = self._fetch_requirement(soup)
 
 		self._cover_image = cover_image
 		self._description = description
 		self._screenshots = screenshots
+		self._title = title
+		self._category = category
+		self._year = year
+		self._requirement = requirement
 
-		self._setup_folder()
-		self._save_cover_image()
-		self._save_screenshots()
-		self._save_description()
+		
+		if write_to_disk:
+			self._setup_folder()
+			self._save_cover_image()
+			self._save_screenshots()
+			self._save_description()
 
 		# print("\n\nCover Image: %s" %cover_image)
 		# print("\nDescription: %s" %description)
@@ -107,6 +118,46 @@ class PlayStore():
 			return (description_container[0].text)
 		else:
 			print("Description not found!")
+			return None
+			
+	def _fetch_title(self, soup):
+		""" fetches title text """
+		
+		title_container = soup.find_all("div", {"class": "id-app-title"})
+		if len(title_container)>0:
+			return (title_container[0].text)
+		else:
+			print("Title not found!")
+			return None
+			
+	def _fetch_category(self, soup):
+		""" fetches category text """
+		
+		category_container = soup.find_all("span", {"itemprop": "genre"})
+		if len(category_container)>0:
+			return (category_container[0].text)
+		else:
+			print("category not found!")
+			return None
+			
+	def _fetch_year(self, soup):
+		""" fetches year text """
+		
+		year_container = soup.find_all("div", {"itemprop": "datePublished"})
+		if len(year_container)>0:
+			return (year_container[0].text[-4:])
+		else:
+			print("category not found!")
+			return None	
+	
+	def _fetch_requirement(self, soup):
+		""" fetches requirement text """
+		
+		requirement_container = soup.find_all("div", {"itemprop": "operatingSystems"})
+		if len(requirement_container)>0:
+			return (requirement_container[0].text)
+		else:
+			print("category not found!")
 			return None
 		
 	def _fetch_screenshots(self, soup):
