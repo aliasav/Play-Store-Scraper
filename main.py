@@ -4,7 +4,7 @@ from scraper import PlayStore
 def main():
 	package_name = str(raw_input("Enter a package name: "))
 	play_store = PlayStore(package_name)	
-	play_store._parse_soup()
+	play_store._parse_soup(True)
 
 if __name__== "__main__":
 	main()
