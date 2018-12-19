@@ -22,7 +22,7 @@ class PlayStore():
 				self.__package_name = package_name
 				print("Initialised play store object with package name: %s" %package_name)
 			else:
-				print("Invlaid package name: %s" %package_name)
+				print("Invalid package name: %s" %package_name)
 				sys.exit(1)
 		except Exception as e:
 			print(e)
@@ -31,7 +31,7 @@ class PlayStore():
 
 	def _validate_play_store_package_name(self, p):
 		""" validate package name string """
-		regex =  "([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$"
+		regex =  "([a-zA-Z_]{1}[a-zA-Z0-9_]*(\.[a-zA-Z_]{1}[a-zA-Z0-9_]*)*)$"
 		return re.match(regex, p)
 
 	def _generate_play_store_url(self):
